@@ -4,7 +4,7 @@
 # Usage: ./propagate-changes.sh [starting-lesson]
 # 
 # Manually add your lesson branches here in order:
-LESSONS=("main" "lesson-01-setup" "lesson-02-components-jsx" "lesson-03-basic-hooks-state" "lesson-04-events" "lesson-05-controlled-form" "lesson-06-project-organization" "lesson-07-data-fetching" "lesson-08-optimization-hooks" "lesson-09-advanced-state" "lesson-10-react-router" "lesson-11-deployment-security")
+LESSONS=("main" "01-setup" "02-components-jsx" "03-basic-hooks-state" "04-events" "05-controlled-form" "06-project-organization" "07-data-fetching" "08-optimization-hooks" "09-advanced-state" "10-react-router" "11-deployment-security")
 
 set -e
 
@@ -109,7 +109,7 @@ case "${1:-help}" in
         echo "  ./propagate-changes.sh status           - Show status of all lessons"
         echo ""
         echo "Examples:"
-        echo "  ./propagate-changes.sh forward lesson-02-components"
+        echo "  ./propagate-changes.sh forward 02-components"
         echo "  ./propagate-changes.sh status"
         echo ""
         echo "Workflow:"
