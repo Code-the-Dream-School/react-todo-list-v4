@@ -4,7 +4,7 @@
 # Usage: ./propagate-changes.sh [starting-lesson]
 # 
 # Manually add your lesson branches here in order:
-LESSONS=("main" "lesson-01-setup" "lesson-02-components-jsx" "lesson-03-basic-hooks-state" "lesson-04-events" "lesson-05-controlled-form" "lesson-06-project-organization" "lesson-07-data-fetching" "lesson-08-optimization-hooks" "lesson-09-advanced-state" "lesson-10-react-router" "lesson-11-deployment-security")
+LESSONS=("main" "01-setup" "02-components-jsx" "03-basic-hooks-state" "04-events" "05-controlled-form" "06-project-organization" "07-data-fetching" "08-optimization-hooks" "09-advanced-state" "10-react-router" "11-deployment-security")
 
 set -e
 
@@ -71,32 +71,44 @@ show_status() {
     done
 }
 
-# Function to validate all lesson branches exist
-validate_branches() {
-    local missing_branches=()
+# Function to create missing lesson branches
+create_missing_branches() {
+    echo -e "${YELLOW}🔍 Checking for missing branches...${NC}"
     
     for lesson in "${LESSONS[@]}"; do
         if [ "$lesson" != "main" ] && ! git show-ref --verify --quiet refs/heads/"$lesson"; then
-            missing_branches+=("$lesson")
+            echo -e "${YELLOW}🆕 Creating missing branch: $lesson${NC}"
+            
+            # Find the previous existing branch to base this one on
+            local base_branch="main"
+            for i in "${!LESSONS[@]}"; do
+                if [[ "${LESSONS[$i]}" == "$lesson" ]] && [ $i -gt 0 ]; then
+                    local prev_lesson="${LESSONS[$((i-1))]}"
+                    if git show-ref --verify --quiet refs/heads/"$prev_lesson"; then
+                        base_branch="$prev_lesson"
+                    fi
+                    break
+                fi
+            done
+            
+            git checkout "$base_branch"
+            git checkout -b "$lesson"
+            echo -e "${GREEN}✅ Created $lesson from $base_branch${NC}"
         fi
     done
     
-    if [ ${#missing_branches[@]} -gt 0 ]; then
-        echo -e "${RED}❌ Missing lesson branches:${NC}"
-        for branch in "${missing_branches[@]}"; do
-            echo -e "  ${RED}✗${NC} $branch"
-        done
-        echo -e "${YELLOW}💡 Please create these branches manually before running the script${NC}"
-        exit 1
-    fi
+    echo -e "${GREEN}✅ All lesson branches verified/created${NC}"
 }
 
 # Main script logic
 case "${1:-help}" in
     "forward")
-        validate_branches
+        create_missing_branches
         starting_lesson="${2:-main}"
         propagate_forward "$starting_lesson"
+        ;;
+    "create-branches")
+        create_missing_branches
         ;;
     "status")
         show_status
@@ -105,11 +117,13 @@ case "${1:-help}" in
         echo "Linear Branch Strategy - Lesson Propagation Tool"
         echo ""
         echo "Usage:"
-        echo "  ./propagate-changes.sh forward [lesson]  - Propagate changes forward from lesson"
-        echo "  ./propagate-changes.sh status           - Show status of all lessons"
+        echo "  ./propagate-changes.sh forward [lesson]     - Propagate changes forward from lesson"
+        echo "  ./propagate-changes.sh create-branches      - Create any missing lesson branches"
+        echo "  ./propagate-changes.sh status               - Show status of all lessons"
         echo ""
         echo "Examples:"
-        echo "  ./propagate-changes.sh forward lesson-02-components"
+        echo "  ./propagate-changes.sh forward 02-components-jsx"
+        echo "  ./propagate-changes.sh create-branches"
         echo "  ./propagate-changes.sh status"
         echo ""
         echo "Workflow:"
@@ -117,7 +131,7 @@ case "${1:-help}" in
         echo "  2. Run: ./propagate-changes.sh forward [that-lesson]"  
         echo "  3. Changes will merge forward through all subsequent lessons"
         echo ""
-        echo "Note: Create lesson branches manually and add them to LESSONS array at top of script"
+        echo "Note: Missing branches will be created automatically when using 'forward' command"
         ;;
 esac
 
