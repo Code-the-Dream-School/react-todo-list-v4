@@ -1,50 +1,19 @@
 import { useState } from 'react';
 import './App.css'
-import TodoList from './features/TodoList/TodoList.jsx';
-import TodoForm from './features/TodoForm.jsx';
+import TodosPage from './features/Todos/TodosPage'
+import Login from './features/Login';
 
 function App() {
-  const [todoList, setTodoList] = useState([]);
 
-  const addTodo = (todoTitle) => {
-    const newTodo = {
-      id: Date.now(),
-      title: todoTitle,
-      isCompleted: false
-    };
-    setTodoList([newTodo, ...todoList]);
-  };
-
-  const completeTodo = (id) => {
-    setTodoList(
-      todoList.map((todo) => {
-        if (todo.id === id) {
-          return { ...todo, isCompleted: true };
-        } else {
-          return todo;
-        }
-      })
-    );
-  };
-
-  const updateTodo = (editedTodo) => {
-    const updatedTodos = todoList.map((todo) => {
-      if (todo.id === editedTodo.id) {
-        return { ...editedTodo };
-      } else {
-        return todo;
-      }
-    });
-    setTodoList(updatedTodos);
-  };
+  const [user, setUser] = useState("");
+  const [userToken, setUserToken] = useState("");
 
   return (
-   <div>
-    <h1>Todo List</h1>
-    <TodoForm onAddTodo={addTodo} />
-    <TodoList todoList={todoList} onCompleteTodo={completeTodo} onUpdateTodo={updateTodo} />
-   </div>
+    <>
+      <Login onSetUser={setUser} onSetUserToken={setUserToken}/>
+      {userToken ? <TodosPage/>: "log in to get started"}
+    </>
   )
 }
 
-export default App
+export default App;
