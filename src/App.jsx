@@ -1,19 +1,26 @@
-import { useState } from 'react';
-import './App.css'
-import TodosPage from './features/Todos/TodosPage'
-import Login from './features/Login';
+import { useState } from "react";
+import "./App.css";
+import TodosPage from "./features/Todos/TodosPage";
+import Logon from "./features/Logon";
+import Header from "./shared/Header";
 
 function App() {
-
-  const [user, setUser] = useState("");
-  const [userToken, setUserToken] = useState("");
+  const [email, setEmail] = useState("");
+  const [token, setToken] = useState("");
+  
 
   return (
     <>
-      <Login onSetUser={setUser} onSetUserToken={setUserToken}/>
-      {userToken ? <TodosPage/>: "log in to get started"}
+      <Header token={token} onSetToken={setToken} onSetEmail={setEmail}></Header>
+      {token ? (
+        <TodosPage />
+      ) : (
+        <>
+          <Logon onSetEmail={setEmail} onSetToken={setToken} />
+        </>
+      )}
     </>
-  )
+  );
 }
 
 export default App;
