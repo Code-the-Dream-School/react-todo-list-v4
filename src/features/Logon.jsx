@@ -3,8 +3,8 @@ import { useState } from "react";
 function Logon({ onSetEmail, onSetToken }) {
   const baseUrl = import.meta.env.VITE_BASE_URL;
 
-  const [email, setEmail] = useState("roy.e.mosby@gmail.com");
-  const [password, setPassword] = useState("!QAZ2wsx#EDC");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [authError, setAuthError] = useState("");
   const [isLoggingOn, setIsLoggingOn] = useState(false);
 
