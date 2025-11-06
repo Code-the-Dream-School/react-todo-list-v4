@@ -2,7 +2,7 @@ import { useState } from 'react';
 import TextInputWithLabel from '../../../shared/TextInputWithLabel.jsx';
 import { isValidTodoTitle } from '../../../utils/todoValidation.js'
 
-function TodoListItem({todo, onCompleteTodo, onUpdateTodo}) {
+function TodoListItem({ todo, onCompleteTodo, onUpdateTodo }) {
   const [isEditing, setIsEditing] = useState(false);
   const [workingTitle, setWorkingTitle] = useState(todo.title);
 
@@ -27,18 +27,23 @@ function TodoListItem({todo, onCompleteTodo, onUpdateTodo}) {
       <form onSubmit={handleUpdate}>
         {isEditing ? (
           <>
-            <TextInputWithLabel 
-              value={workingTitle}
-              onChange={handleEdit}
-            />
-            <button type="button" onClick={handleCancel}>Cancel</button>
-            <button type="button" onClick={handleUpdate} disabled={!isValidTodoTitle(workingTitle)}>Update</button>
+            <TextInputWithLabel value={workingTitle} onChange={handleEdit} />
+            <button type='button' onClick={handleCancel}>
+              Cancel
+            </button>
+            <button
+              type='button'
+              onClick={handleUpdate}
+              disabled={!isValidTodoTitle(workingTitle)}
+            >
+              Update
+            </button>
           </>
         ) : (
           <>
             <label>
               <input
-                type="checkbox"
+                type='checkbox'
                 id={`checkbox${todo.id}`}
                 checked={todo.isCompleted}
                 onChange={() => onCompleteTodo(todo.id)}
