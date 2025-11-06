@@ -1,31 +1,31 @@
-import { useState, useEffect } from "react";
-import TodoList from "./TodoList/TodoList";
-import TodoForm from "./TodoForm";
+import { useState, useEffect } from 'react';
+import TodoList from './TodoList/TodoList';
+import TodoForm from './TodoForm';
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
 function TodosPage({ token }) {
   const [todoList, setTodoList] = useState([]);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [isTodoListLoading, setIsTodoListLoading] = useState(false);
 
   useEffect(() => {
     async function fetchTodos() {
       setIsTodoListLoading(true);
       const options = {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "X-CSRF-TOKEN": token,
+          'X-CSRF-TOKEN': token,
         },
-        credentials: "include",
+        credentials: 'include',
       };
       try {
         const resp = await fetch(`${baseUrl}/tasks`, options);
         if (resp.status === 401) {
-          throw new Error("unauthorized");
+          throw new Error('unauthorized');
         }
         if (!resp.ok) {
-          throw new Error(resp.message || "Failed to fetch todos");
+          throw new Error(resp.message || 'Failed to fetch todos');
         }
         const todos = await resp.json();
         setTodoList(todos);
@@ -49,24 +49,24 @@ function TodosPage({ token }) {
     };
 
     // Optimistic update
-    setTodoList((currentList) => [...currentList, newTodo ]);
+    setTodoList((currentList) => [...currentList, newTodo]);
 
     try {
       const options = {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
-          "X-CSRF-TOKEN": token,
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': token,
         },
         body: JSON.stringify({
           title: newTodo.title,
           isCompleted: newTodo.isCompleted,
         }),
-        credentials: "include",
+        credentials: 'include',
       };
       const resp = await fetch(`${baseUrl}/tasks`, options);
       if (!resp.ok) {
-        throw new Error(resp.message || "Failed to add todo");
+        throw new Error(resp.message || 'Failed to add todo');
       }
       const savedTodo = await resp.json();
 
@@ -102,20 +102,20 @@ function TodosPage({ token }) {
 
     try {
       const options = {
-        method: "PATCH",
+        method: 'PATCH',
         headers: {
-          "Content-Type": "application/json",
-          "X-CSRF-TOKEN": token,
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': token,
         },
         body: JSON.stringify({
           isCompleted: true,
           createdTime: originalTodo.createdTime,
         }),
-        credentials: "include",
+        credentials: 'include',
       };
       const resp = await fetch(`${baseUrl}/tasks/${id}`, options);
       if (!resp.ok) {
-        throw new Error(resp.message || "Failed to complete todo");
+        throw new Error(resp.message || 'Failed to complete todo');
       }
     } catch (error) {
       setError(
@@ -145,21 +145,21 @@ function TodosPage({ token }) {
 
     try {
       const options = {
-        method: "PATCH",
+        method: 'PATCH',
         headers: {
-          "Content-Type": "application/json",
-          "X-CSRF-TOKEN": token,
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': token,
         },
         body: JSON.stringify({
           title: editedTodo.title,
           isCompleted: editedTodo.isCompleted,
           createdTime: editedTodo.createdTime,
         }),
-        credentials: "include",
+        credentials: 'include',
       };
       const resp = await fetch(`${baseUrl}/tasks/${editedTodo.id}`, options);
       if (!resp.ok) {
-        throw new Error(resp.message || "Failed to update todo");
+        throw new Error(resp.message || 'Failed to update todo');
       }
     } catch (error) {
       setError(
@@ -179,7 +179,7 @@ function TodosPage({ token }) {
       {error && (
         <div>
           <p>{error}</p>
-          <button onClick={() => setError("")}>Clear Error</button>
+          <button onClick={() => setError('')}>Clear Error</button>
         </div>
       )}
       {isTodoListLoading && <div>Loading todos...</div>}
