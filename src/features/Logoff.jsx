@@ -1,30 +1,32 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
 function Logoff({ token, onSetToken, onSetEmail }) {
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [isLoggingOff, setIsLoggingOff] = useState(false);
   async function handleLogoff() {
     setIsLoggingOff(true);
     try {
       const options = {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "X-CSRF-TOKEN": token,
+          'X-CSRF-TOKEN': token,
         },
-        credentials: "include",
+        credentials: 'include',
       };
       const res = await fetch(`${baseUrl}/user/logoff`, options);
       if (res.status === 200 || res.status === 401) {
-        onSetEmail("");
-        onSetToken("");
+        onSetEmail('');
+        onSetToken('');
       } else {
         const data = await res.json();
-        setError(data.message || "Logoff failed");
-        setIsLoggingOf(false);
+        setError(data.message || 'Logoff failed');
+        setIsLoggingOff(false);
       }
-    } catch {}
+    } catch {
+      setError('Error logging off');
+    }
   }
   return (
     <>
