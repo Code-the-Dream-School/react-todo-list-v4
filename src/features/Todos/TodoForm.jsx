@@ -8,7 +8,7 @@ function TodoForm({ onAddTodo }) {
 
   const handleAddTodo = (event) => {
     event.preventDefault();
-    
+
     if (workingTodoTitle.trim()) {
       onAddTodo(workingTodoTitle);
       setWorkingTodoTitle('');
@@ -19,13 +19,15 @@ function TodoForm({ onAddTodo }) {
   return (
     <form onSubmit={handleAddTodo}>
       <TextInputWithLabel
-        elementId="todoTitle"
-        labelText="Todo"
+        elementId='todoTitle'
+        labelText='Todo'
         ref={inputRef}
         value={workingTodoTitle}
         onChange={(event) => setWorkingTodoTitle(event.target.value)}
       />
-      <button type="submit" disabled={!isValidTodoTitle(workingTodoTitle)}>Add Todo</button>
+      <button type='submit' disabled={!isValidTodoTitle(workingTodoTitle)}>
+        Add Todo
+      </button>
     </form>
   );
 }
