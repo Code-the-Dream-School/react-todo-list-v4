@@ -3,6 +3,12 @@ import './App.css';
 import TodoList from './TodoList.jsx';
 import TodoForm from './TodoForm.jsx';
 
+const todos = [
+  { id: 1, title: 'clone repo' },
+  { id: 2, title: 'install' },
+  { id: 3, title: 'run dev server' },
+];
+
 function App() {
   const [todoList, setTodoList] = useState(todos);
 
