@@ -1,8 +1,8 @@
-function TodoListItem({todo, onCompleteTodo}) {
+function TodoListItem({ todo, onCompleteTodo }) {
   return (
     <li>
       <input
-        type="checkbox"
+        type='checkbox'
         checked={todo.isCompleted}
         onChange={() => onCompleteTodo(todo.id)}
       />

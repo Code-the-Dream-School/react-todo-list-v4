@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import './App.css'
+import './App.css';
 import TodoList from './TodoList.jsx';
 import TodoForm from './TodoForm.jsx';
 
@@ -10,7 +10,7 @@ function App() {
     const newTodo = {
       id: Date.now(),
       title: todoTitle,
-      isCompleted: false
+      isCompleted: false,
     };
     setTodoList([newTodo, ...todoList]);
   };
@@ -28,12 +28,12 @@ function App() {
   };
 
   return (
-   <div>
-    <h1>Todo List</h1>
-    <TodoForm onAddTodo={addTodo} />
-    <TodoList todoList={todoList} onCompleteTodo={completeTodo} />
-   </div>
-  )
+    <div>
+      <h1>Todo List</h1>
+      <TodoForm onAddTodo={addTodo} />
+      <TodoList todoList={todoList} onCompleteTodo={completeTodo} />
+    </div>
+  );
 }
 
-export default App
+export default App;

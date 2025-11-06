@@ -4,7 +4,6 @@ about: Template for curriculum v4 project
 title: ''
 labels: ''
 assignees: ''
-
 ---
 
 ## Functional Requirements
