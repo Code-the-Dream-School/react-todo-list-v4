@@ -49,7 +49,7 @@ function TodosPage({ token }) {
     };
 
     // Optimistic update
-    setTodoList((currentList) => [newTodo, ...currentList]);
+    setTodoList((currentList) => [...currentList, newTodo ]);
 
     try {
       const options = {
@@ -117,12 +117,6 @@ function TodosPage({ token }) {
       if (!resp.ok) {
         throw new Error(resp.message || "Failed to complete todo");
       }
-      const updatedTodo = await resp.json();
-
-      // Update with server response
-      setTodoList((currentList) =>
-        currentList.map((todo) => (todo.id === id ? updatedTodo : todo))
-      );
     } catch (error) {
       setError(
         `Error completing todo: ${originalTodo.title} | Error message: ${error.message}`
@@ -167,14 +161,6 @@ function TodosPage({ token }) {
       if (!resp.ok) {
         throw new Error(resp.message || "Failed to update todo");
       }
-      const updatedTodo = await resp.json();
-
-      // Update with server response
-      setTodoList((currentList) =>
-        currentList.map((todo) =>
-          todo.id === editedTodo.id ? updatedTodo : todo
-        )
-      );
     } catch (error) {
       setError(
         `Error updating todo: ${editedTodo.title} | Error message: ${error.message}`
