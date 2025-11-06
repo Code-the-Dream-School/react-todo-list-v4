@@ -146,7 +146,7 @@ Create lesson branches manually in order:
 git checkout main
 git checkout -b lesson-01-basic
 
-git checkout main  
+git checkout main
 git checkout -b lesson-02-components
 
 # Continue for each lesson...
