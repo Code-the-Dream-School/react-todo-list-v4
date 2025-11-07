@@ -6,7 +6,7 @@
 
 After completing this week's assignment, your app should:
 
-- Require user authentication before accessing todos
+- Require user to authenticate before accessing todos
 - Fetch todos from a backend API and display them
 - Allow users to add new todos that persist to the database
 - Allow users to mark todos as complete with database updates
