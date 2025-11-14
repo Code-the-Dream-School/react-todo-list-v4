@@ -21,11 +21,14 @@ function TodosPage({ token }) {
   useEffect(() => {
     async function fetchTodos() {
       setIsTodoListLoading(true);
-      const params = new URLSearchParams({
+      const paramsObject = {
         sortBy,
         sortDirection,
-        ...(debouncedFilterTerm && { find: debouncedFilterTerm }),
-      });
+      };
+      if (debouncedFilterTerm) {
+        paramsObject.find = debouncedFilterTerm;
+      }
+      const params = new URLSearchParams(paramsObject);
       const options = {
         method: 'GET',
         headers: {
@@ -200,12 +203,12 @@ function TodosPage({ token }) {
     }
   };
 
-  const handleFilterChange = useCallback((newFilterTerm) => {
+  const handleFilterChange = (newFilterTerm) => {
     setFilterTerm(newFilterTerm);
-  }, []);
+  };
 
   const invalidateCache = useCallback(() => {
-    console.log('Invalidating memo cache after todoList updates');
+    console.log('Invalidating memo cache after todo mutation');
     setDataVersion((prev) => prev + 1);
   }, []);
 
