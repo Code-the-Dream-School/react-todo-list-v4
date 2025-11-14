@@ -112,6 +112,9 @@ This codebase prioritizes **progressive learning** over production patterns. Whe
 
 ## Assignment Drafting Guidelines
 
+- Draft assignments with a focus on the differences between the previous week's branch and the current week's branch
+- Use minimal examples
+
 When drafting student assignments, follow this established structure and style:
 
 ### Assignment Structure Pattern
@@ -121,24 +124,24 @@ When drafting student assignments, follow this established structure and style:
 
 [Clear list of what the app should do after completing the week]
 
-### Instructions Part 1: [Setup/Preparation]
+### Instructions Part 1: [Core Development Task]
 
-#### Version Control Preparation (Exclude step after week 2)
+#### Version Control Preparation (Only include for weeks 1-2)
 
 - Merge previous week's PR
 - Create new branch: week-XX-[topic]
 
 ### Instructions Part 2-4: [Core Development Tasks]
 
-#### [Specific Task Name]
+### [Specific Task Name]
 
-[Step-by-step instructions with code examples]
+[Step-by-step instructions focusing on what to implement rather than showing complete code. Include file paths, function names, and expected behavior. Reserve code examples only for complex syntax or entirely new concepts students haven't encountered.]
 
 ### Instructions Part 5: Final Testing & Submission
 
 #### Test Your Application
 
-#### Version Control Submission
+#### Version Control Submission (Only include for weeks 1-2)
 
 ### What You Accomplished This Week
 
@@ -152,11 +155,12 @@ When drafting student assignments, follow this established structure and style:
 ### Assignment Writing Conventions
 
 - **Progressive difficulty**: Each week builds on previous concepts
-- **Explicit code examples**: Show exact code students should write
+- **Minimal code examples**: Provide clear instructions instead of full code blocks. Use code examples sparingly - only for confusing syntax, complex implementations, or entirely new concepts students haven't seen
+- **Descriptive instructions**: Tell students what to implement rather than showing complete code. Focus on file locations, function names, parameter descriptions, and expected behavior
 - **Error acknowledgment**: Mention expected errors and why they occur
-- **Console exploration**: Include console.log examples for learning
+- **Console exploration**: Include console.log examples for learning when demonstrating new debugging techniques
 - **Accessibility focus**: Use proper labels, htmlFor attributes
-- **Version control workflow**: Consistent branch naming (week-XX-topic)
+- **Version control workflow**: Consistent branch naming (week-XX-topic) - only include for weeks 1-2
 - **User experience**: Focus on input focus, form validation, error handling
 - **Visual verification**: Include screenshots showing expected results
 
