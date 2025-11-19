@@ -8,7 +8,7 @@ import {
   todoReducer,
   initialTodoState,
   TODO_ACTIONS,
-} from '../../utils/todoReducer';
+} from '../../reducers/todoReducer';
 import { useAuth } from '../../contexts/AuthContext';
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
