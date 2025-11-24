@@ -16,7 +16,7 @@ export function useAuth() {
 
 // Auth Provider component
 export function AuthProvider({ children }) {
-  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
   const [token, setToken] = useState('');
 
   // Login function
@@ -32,7 +32,7 @@ export function AuthProvider({ children }) {
     const data = await res.json();
 
     if (res.status === 200 && data.name && data.csrfToken) {
-      setEmail(data.name);
+      setName(data.name);
       setToken(data.csrfToken);
       return { success: true };
     } else {
@@ -47,7 +47,7 @@ export function AuthProvider({ children }) {
   const logout = async () => {
     if (!token) {
       // If no token, just clear state
-      setEmail('');
+      setName('');
       setToken('');
       return { success: true };
     }
@@ -64,7 +64,7 @@ export function AuthProvider({ children }) {
       const res = await fetch(`${baseUrl}/user/logoff`, options);
 
       if (res.status === 200 || res.status === 401) {
-        setEmail('');
+        setName('');
         setToken('');
         return { success: true };
       } else {
@@ -84,7 +84,7 @@ export function AuthProvider({ children }) {
 
   // Context value
   const value = {
-    email,
+    name,
     token,
     isAuthenticated: !!token,
     login,
