@@ -1,4 +1,5 @@
 import Logoff from '../features/Logoff';
+import Navigation from './Navigation';
 import { useAuth } from '../contexts/AuthContext';
 
 function Header() {
@@ -7,6 +8,7 @@ function Header() {
   return (
     <>
       <h1>Todo List</h1>
+      <Navigation />
       {isAuthenticated && <Logoff />}
     </>
   );

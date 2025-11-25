@@ -1,20 +1,23 @@
 import { useEffect, useCallback, useReducer } from 'react';
-import TodoList from './TodoList/TodoList';
-import TodoForm from './TodoForm';
-import SortBy from '../../shared/SortBy';
-import FilterInput from '../../shared/FilterInput';
-import useDebounce from '../../utils/useDebounce';
+import { useSearchParams } from 'react-router';
+import TodoList from '../features/Todos/TodoList/TodoList';
+import TodoForm from '../features/Todos/TodoForm';
+import SortBy from '../shared/SortBy';
+import FilterInput from '../shared/FilterInput';
+import StatusFilter from '../shared/StatusFilter';
+import useDebounce from '../utils/useDebounce';
 import {
   todoReducer,
   initialTodoState,
   TODO_ACTIONS,
-} from '../../reducers/todoReducer';
-import { useAuth } from '../../contexts/AuthContext';
+} from '../reducers/todoReducer';
+import { useAuth } from '../contexts/AuthContext';
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
 function TodosPage() {
   const { token } = useAuth();
+  const [searchParams] = useSearchParams();
   const [state, dispatch] = useReducer(todoReducer, initialTodoState);
   const {
     todoList,
@@ -27,6 +30,9 @@ function TodosPage() {
     dataVersion,
   } = state;
   const debouncedFilterTerm = useDebounce(filterTerm, 300);
+
+  // Get status filter from URL, default to 'all'
+  const statusFilter = searchParams.get('status') || 'all';
 
   useEffect(() => {
     async function fetchTodos() {
@@ -267,6 +273,7 @@ function TodosPage() {
           })
         }
       />
+      <StatusFilter />
       <FilterInput
         filterTerm={filterTerm}
         onFilterChange={handleFilterChange}
@@ -277,6 +284,7 @@ function TodosPage() {
         onCompleteTodo={completeTodo}
         onUpdateTodo={updateTodo}
         dataVersion={dataVersion}
+        statusFilter={statusFilter}
       />
     </div>
   );
