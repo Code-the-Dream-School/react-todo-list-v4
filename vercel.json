@@ -1,14 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "rewrites": [
-    {
-      "source": "/remote-api/:path*",
-      "destination": "https://ctd-learns-node-l42tx.ondigitalocean.app"
-    }
-  ],
   "headers": [
     {
-      "source": "/remote-api/:path*",
+      "source": "https://ctd-learns-node-l42tx.ondigitalocean.app/:path*",
       "headers": [
         {
           "key": "Origin",
