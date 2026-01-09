@@ -3,7 +3,7 @@
   "rewrites": [
     {
       "source": "/remote-api/:path*",
-      "destination": "https://task-store.onrender.com/:path*"
+      "destination": "https://ctd-learns-node-l42tx.ondigitalocean.app/:path*"
     }
   ],
   "headers": [
