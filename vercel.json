@@ -3,7 +3,7 @@
   "rewrites": [
     {
       "source": "/remote-api/:path*",
-      "destination": "https://ctd-learns-node-l42tx.ondigitalocean.app/:path*"
+      "destination": "https://task-store.onrender.com/:path*"
     }
   ],
   "headers": [
@@ -11,8 +11,8 @@
       "source": "/remote-api/:path*",
       "headers": [
         {
-          "key": "Origin",
-          "value": "https://ctd-learns-node-l42tx.ondigitalocean.app"
+          "key": "X-Same-Origin-Proxy",
+          "value": "vercel"
         }
       ]
     }

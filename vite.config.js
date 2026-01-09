@@ -18,8 +18,7 @@ export default ({ mode }) => {
           rewrite: (p) => p.replace(/^\/remote-api/, ''),
           configure: (proxy) => {
             proxy.on('proxyReq', (proxyReq) => {
-              // Manually set the Origin header to match your target
-              proxyReq.setHeader('Origin', backend);
+              proxyReq.setHeader('X-Same-Origin-Proxy', 'vite');
             });
           },
         },
