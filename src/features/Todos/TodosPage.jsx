@@ -20,15 +20,15 @@ function TodosPage({ token }) {
         credentials: 'include',
       };
       try {
-        const resp = await fetch(`${baseUrl}/tasks`, options);
+        const resp = await fetch(`${baseUrl}/api/tasks`, options);
         if (resp.status === 401) {
           throw new Error('unauthorized');
         }
         if (!resp.ok) {
           throw new Error(resp.message || 'Failed to fetch todos');
         }
-        const todos = await resp.json();
-        setTodoList(todos);
+        const taskData = await resp.json();
+        setTodoList(taskData.tasks);
       } catch (error) {
         setError(`Error: ${error.name} | ${error.message}`);
       } finally {
