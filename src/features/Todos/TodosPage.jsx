@@ -47,17 +47,18 @@ function TodosPage() {
         credentials: 'include',
       };
       try {
-        const resp = await fetch(`${baseUrl}/tasks?${params}`, options);
+        const resp = await fetch(`${baseUrl}/api/tasks${params}`, options);
         if (resp.status === 401) {
           throw new Error('unauthorized');
         }
         if (!resp.ok) {
           throw new Error(resp.message || 'Failed to fetch todos');
         }
-        const todos = await resp.json();
+        const taskData = await resp.json();
+
         dispatch({
           type: TODO_ACTIONS.FETCH_SUCCESS,
-          payload: { todos },
+          payload: { todos: taskData.tasks },
         });
       } catch (error) {
         const isFilterError =
