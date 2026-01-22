@@ -18,7 +18,7 @@ function Logon({ onSetEmail, onSetToken }) {
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
       };
-      const res = await fetch(`${baseUrl}/user/logon`, options);
+      const res = await fetch(`${baseUrl}/users/logon`, options);
       const data = await res.json();
       console.dir(res);
       if (res.status === 200 && data.name && data.csrfToken) {
