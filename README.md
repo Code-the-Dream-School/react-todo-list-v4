@@ -1,7 +1,27 @@
 # React Todo List V4 (Work in Progress)
 
 > **⚠️ Important Note for Students**  
-> This branch (`local-dev-vite-proxy)✔`) includes configuration for students whose browsers are configured to reject 3rd-party cookies. Many modern browsers (Chrome, Firefox, Safari, etc.) are moving away from 3rd-party cookie support for privacy and security reasons. If you're experiencing authentication issues with the standard configuration, this branch uses a Vite proxy setup to make the frontend and backend appear as the same origin, avoiding cross-site cookie restrictions. The proxy remaps API requests so that cookies are treated as first-party (same-site) cookies rather than third-party cookies.
+> This branch (`09-advanced-state`) includes **Vite proxy configuration** for students whose browsers are configured to reject 3rd-party cookies. Many modern browsers (Chrome, Firefox, Safari, etc.) are moving away from 3rd-party cookie support for privacy and security reasons.
+>
+> **Key Changes Made:**
+>
+> - **[`vite.config.js`](vite.config.js)** - Added proxy rules for `/api` and `/user` endpoints that route requests through the Vite dev server to the backend, making frontend and backend appear as the same origin
+> - **[`.env.example`](.env.example)** - Updated to show the two-variable approach: `VITE_BASE_URL=/api` (frontend path) and `VITE_BACK_END=https://backend-url` (proxy target)
+>
+> **How It Works:**
+>
+> 1. Frontend makes requests to `localhost:3001/api/*`
+> 2. Vite proxy intercepts these requests and routes them to the production backend
+> 3. Cookies are treated as first-party (same-site) rather than third-party cookies
+> 4. Authentication works regardless of browser cookie settings
+>
+> **To Use This Configuration:**
+> Set your `.env` file to:
+>
+> ```dotenv
+> VITE_BASE_URL=/api
+> VITE_BACK_END=https://ctd-learns-node-l42tx.ondigitalocean.app
+> ```
 
 This repo contains an example todo list project that intro to React mentors may use as a reference to evaluate student work. Each branch represents the end state of the student's weekly progress through the curriculum.
 
