@@ -1,5 +1,8 @@
 # React Todo List V4 (Work in Progress)
 
+> **⚠️ Important Note for Students**  
+> This branch (`local-dev-vite-proxy)✔`) includes configuration for students whose browsers are configured to reject 3rd-party cookies. Many modern browsers (Chrome, Firefox, Safari, etc.) are moving away from 3rd-party cookie support for privacy and security reasons. If you're experiencing authentication issues with the standard configuration, this branch uses a Vite proxy setup to make the frontend and backend appear as the same origin, avoiding cross-site cookie restrictions. The proxy remaps API requests so that cookies are treated as first-party (same-site) cookies rather than third-party cookies.
+
 This repo contains an example todo list project that intro to React mentors may use as a reference to evaluate student work. Each branch represents the end state of the student's weekly progress through the curriculum.
 
 ## Running this Application
