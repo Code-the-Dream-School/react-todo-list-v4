@@ -20,7 +20,7 @@ function TodosPage({ token }) {
         credentials: 'include',
       };
       try {
-        const resp = await fetch(`${baseUrl}/api/tasks`, options);
+        const resp = await fetch(`${baseUrl}/tasks`, options);
         if (resp.status === 401) {
           throw new Error('unauthorized');
         }
