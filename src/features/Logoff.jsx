@@ -15,7 +15,7 @@ function Logoff({ token, onSetToken, onSetEmail }) {
         },
         credentials: 'include',
       };
-      const res = await fetch(`${baseUrl}/user/logoff`, options);
+      const res = await fetch(`${baseUrl}/users/logoff`, options);
       if (res.status === 200 || res.status === 401) {
         onSetEmail('');
         onSetToken('');
