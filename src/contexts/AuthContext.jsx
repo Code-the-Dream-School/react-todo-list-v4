@@ -28,7 +28,7 @@ export function AuthProvider({ children }) {
       credentials: 'include',
     };
 
-    const res = await fetch(`${baseUrl}/user/logon`, options);
+    const res = await fetch(`${baseUrl}/users/logon`, options);
     const data = await res.json();
 
     if (res.status === 200 && data.name && data.csrfToken) {
