@@ -107,10 +107,16 @@ function getCurrentBranch() {
 
 function branchExists(branch) {
   try {
+    // Check local first, then remote
     exec(`git rev-parse --verify ${branch}`, { throwOnError: true });
     return true;
   } catch {
-    return false;
+    try {
+      exec(`git rev-parse --verify origin/${branch}`, { throwOnError: true });
+      return true;
+    } catch {
+      return false;
+    }
   }
 }
 
@@ -213,7 +219,12 @@ function applyFilesToBranch(branch, sourceFiles, dryRun = false) {
 
   try {
     if (!dryRun) {
-      exec(`git checkout ${branch}`);
+      // Try to checkout local branch, or create it from remote if it doesn't exist locally
+      try {
+        exec(`git checkout ${branch}`);
+      } catch {
+        exec(`git checkout --track origin/${branch}`);
+      }
     }
 
     const changes = [];
