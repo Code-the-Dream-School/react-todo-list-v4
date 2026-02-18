@@ -89,7 +89,27 @@ git commit -m "Update TextInputWithLabel usage with hooks"
 
 ## Syncing Fixed Files Across Branches
 
-To keep tooling configuration, documentation, and environment examples consistent across all lesson branches, use the fixed-file sync script:
+To keep tooling configuration, documentation, and environment examples consistent across all lesson branches, use the fixed-file sync script.
+
+### Setup (One-Time)
+
+Make the script executable on your machine:
+
+**macOS / Linux:**
+
+```bash
+chmod +x maintenance/sync-fixed-files.js
+```
+
+**Windows (PowerShell as Administrator):**
+
+```powershell
+icacls "maintenance\sync-fixed-files.js" /grant Everyone:F
+```
+
+Alternatively on Windows, you can skip this step—npm will run the script directly via Node.
+
+### Usage
 
 ```bash
 # Validate changes before applying
