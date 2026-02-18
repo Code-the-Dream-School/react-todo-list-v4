@@ -13,8 +13,6 @@ import {
 } from '../reducers/todoReducer';
 import { useAuth } from '../contexts/AuthContext';
 
-const baseUrl = import.meta.env.VITE_BASE_URL;
-
 function TodosPage() {
   const { token } = useAuth();
   const [searchParams] = useSearchParams();
@@ -53,7 +51,7 @@ function TodosPage() {
         credentials: 'include',
       };
       try {
-        const resp = await fetch(`${baseUrl}/tasks?${params}`, options);
+        const resp = await fetch(`/api/tasks?${params}`, options);
         if (resp.status === 401) {
           throw new Error('unauthorized');
         }
@@ -113,7 +111,7 @@ function TodosPage() {
         }),
         credentials: 'include',
       };
-      const resp = await fetch(`${baseUrl}/tasks`, options);
+      const resp = await fetch(`/api/tasks`, options);
       if (!resp.ok) {
         throw new Error(resp.message || 'Failed to add todo');
       }
@@ -159,7 +157,7 @@ function TodosPage() {
         }),
         credentials: 'include',
       };
-      const resp = await fetch(`${baseUrl}/tasks/${id}`, options);
+      const resp = await fetch(`/api/tasks/${id}`, options);
       if (!resp.ok) {
         throw new Error(resp.message || 'Failed to complete todo');
       }
@@ -201,7 +199,7 @@ function TodosPage() {
         }),
         credentials: 'include',
       };
-      const resp = await fetch(`${baseUrl}/tasks/${editedTodo.id}`, options);
+      const resp = await fetch(`/api/tasks/${editedTodo.id}`, options);
       if (!resp.ok) {
         throw new Error(resp.message || 'Failed to update todo');
       }

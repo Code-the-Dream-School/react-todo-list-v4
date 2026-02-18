@@ -1,7 +1,5 @@
 import { createContext, useContext, useState } from 'react';
 
-const baseUrl = import.meta.env.VITE_BASE_URL;
-
 // Create the Auth Context
 export const AuthContext = createContext();
 
@@ -28,7 +26,7 @@ export function AuthProvider({ children }) {
       credentials: 'include',
     };
 
-    const res = await fetch(`${baseUrl}/user/logon`, options);
+    const res = await fetch(`/api/users/logon`, options);
     const data = await res.json();
 
     if (res.status === 200 && data.name && data.csrfToken) {
@@ -61,7 +59,7 @@ export function AuthProvider({ children }) {
         credentials: 'include',
       };
 
-      const res = await fetch(`${baseUrl}/user/logoff`, options);
+      const res = await fetch(`/api/users/logoff`, options);
 
       if (res.status === 200 || res.status === 401) {
         setName('');
