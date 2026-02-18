@@ -2,9 +2,10 @@
 
 import fs from 'fs';
 import path from 'path';
-import { execSync, spawnSync } from 'child_process';
+import { execSync } from 'child_process';
 import readline from 'readline';
 import { fileURLToPath } from 'url';
+import process from 'process';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, '..');
@@ -335,9 +336,15 @@ async function pushChanges(changedBranches) {
 function printSummary(results, pushResults) {
   log('\n=== SYNC SUMMARY ===');
 
-  const changed = Object.entries(results).filter(([, r]) => r.status === 'changed');
-  const unchanged = Object.entries(results).filter(([, r]) => r.status === 'unchanged');
-  const failed = Object.entries(results).filter(([, r]) => r.status === 'failed');
+  const changed = Object.entries(results).filter(
+    ([, r]) => r.status === 'changed'
+  );
+  const unchanged = Object.entries(results).filter(
+    ([, r]) => r.status === 'unchanged'
+  );
+  const failed = Object.entries(results).filter(
+    ([, r]) => r.status === 'failed'
+  );
 
   if (changed.length > 0) {
     log(`\nChanged (${changed.length}):`);
@@ -372,7 +379,9 @@ function printSummary(results, pushResults) {
 async function main() {
   try {
     log('Starting fixed-file sync');
-    log(`Mode: ${flags.dryRun ? 'dry-run' : flags.local ? 'local-only' : 'default (push enabled)'}`);
+    log(
+      `Mode: ${flags.dryRun ? 'dry-run' : flags.local ? 'local-only' : 'default (push enabled)'}`
+    );
 
     // Preflight
     await runPreflights();
@@ -380,7 +389,10 @@ async function main() {
     // Auth probe
     const authOk = await probeAuth();
     if (!authOk && !flags.local && !flags.dryRun) {
-      log('Auth probe failed. Consider using --local mode or fix authentication.', 'warn');
+      log(
+        'Auth probe failed. Consider using --local mode or fix authentication.',
+        'warn'
+      );
     }
 
     // Get source files
@@ -434,7 +446,11 @@ async function main() {
 
     printSummary(results, pushResults);
 
-    if (changedBranches.length > 0 && !pushResults.pushed.length && !flags.local) {
+    if (
+      changedBranches.length > 0 &&
+      !pushResults.pushed.length &&
+      !flags.local
+    ) {
       log(
         '\nLocal sync completed. GitHub is not updated until branches are published.\nPush manually or re-run without --local flag.',
         'warn'

@@ -61,7 +61,7 @@ git checkout 03-basic-hooks-state
 - `npm run dev` - Vite dev server (port 5173)
 - `npm run lint:fix` - Auto-fix ESLint + Prettier issues
 - `npm run format` - Format all files with Prettier
-- `npm run sync:fixed-files` - Sync fixed configuration and documentation files from `main` to all lesson branches (see [README](../../README.md#syncing-fixed-files-across-branches))
+- `npm run sync:fixed-files` - Sync fixed configuration and documentation files from `main` to all lesson branches (see README.md for usage)
 
 ## Code Conventions
 
