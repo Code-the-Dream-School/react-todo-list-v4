@@ -38,6 +38,8 @@ function TodosPage() {
       const paramsObject = {
         sortBy,
         sortDirection,
+        page: 0,
+        limit: 99,
       };
       if (debouncedFilterTerm) {
         paramsObject.find = debouncedFilterTerm;
@@ -61,7 +63,7 @@ function TodosPage() {
         const todos = await resp.json();
         dispatch({
           type: TODO_ACTIONS.FETCH_SUCCESS,
-          payload: { todos },
+          payload: { todos: todos.tasks },
         });
       } catch (error) {
         const isFilterError =
