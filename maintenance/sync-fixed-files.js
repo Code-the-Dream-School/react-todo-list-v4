@@ -24,7 +24,6 @@ const TARGET_BRANCHES = [
   '09-advanced-state',
   '10-react-router',
   '11-deployment-security',
-  '29-propagation-automation-for-readme-and-other-fixed-files-across-branches',
   'deploy',
   'deploy-vercel',
   'local-dev-vite-proxy',
@@ -39,6 +38,7 @@ const FIXED_FILES = [
   'package.json',
   '.env.example',
   'README.md',
+  'vercel.json',
 ];
 
 // Parse CLI flags
