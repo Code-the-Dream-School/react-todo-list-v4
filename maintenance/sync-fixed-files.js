@@ -49,6 +49,11 @@ const flags = {
   force: args.includes('--force'),
 };
 
+// Parse optional --message flag
+const messageIndex = args.indexOf('--message');
+const customMessage =
+  messageIndex !== -1 && args[messageIndex + 1] ? args[messageIndex + 1] : null;
+
 // Utility functions
 function log(message, level = 'info') {
   const timestamp = new Date().toISOString().split('T')[1].split('.')[0];
@@ -273,6 +278,18 @@ function getSourceFiles() {
   return files;
 }
 
+// Build commit message with optional custom context
+function buildCommitMessage() {
+  const baseMessage = 'chore: sync fixed files from main';
+  const description =
+    '\n\nAutomated sync of tooling configuration, documentation, and environment examples across lesson branches.';
+
+  if (customMessage) {
+    return `${baseMessage} - ${customMessage}${description}`;
+  }
+  return `${baseMessage}${description}`;
+}
+
 // Apply files to target branch
 function applyFilesToBranch(branch, sourceFiles, dryRun = false) {
   const originalBranch = getCurrentBranch();
@@ -331,10 +348,8 @@ function applyFilesToBranch(branch, sourceFiles, dryRun = false) {
     // Commit changes immediately to avoid checkout conflicts on next branch
     if (!dryRun && changes.length > 0) {
       exec('git add .', { throwOnError: false });
-      exec(
-        'git commit -m "chore: sync fixed files from main\n\nAutomated sync of tooling configuration, documentation, and environment examples across lesson branches."',
-        { throwOnError: false }
-      );
+      const commitMsg = buildCommitMessage();
+      exec(`git commit -m "${commitMsg}"`, { throwOnError: false });
     }
 
     return { success: true, changes, branch };
