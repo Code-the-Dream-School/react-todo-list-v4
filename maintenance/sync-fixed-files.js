@@ -36,6 +36,7 @@ const FIXED_FILES = [
   'eslint.config.js',
   'vite.config.js',
   'package.json',
+  'package-lock.json',
   '.env.example',
   'README.md',
   'vercel.json',
