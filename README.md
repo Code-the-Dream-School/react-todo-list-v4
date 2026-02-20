@@ -87,6 +87,49 @@ git commit -m "Update TextInputWithLabel usage with hooks"
 # Continue for other lessons that use the component...
 ```
 
+## Syncing Fixed Files Across Branches
+
+To keep tooling configuration, documentation, and environment examples consistent across all lesson branches, use the fixed-file sync script.
+
+### Setup (One-Time)
+
+Make the script executable on your machine:
+
+**macOS / Linux:**
+
+```bash
+chmod +x maintenance/sync-fixed-files.js
+```
+
+**Windows (PowerShell as Administrator):**
+
+```powershell
+icacls "maintenance\sync-fixed-files.js" /grant Everyone:F
+```
+
+Alternatively on Windows, you can skip this step—npm will run the script directly via Node.
+
+### Usage
+
+```bash
+# Validate changes before applying
+npm run sync:fixed-files -- --dry-run
+
+# Sync locally (no GitHub push)
+npm run sync:fixed-files -- --local
+
+# Sync and push to GitHub (default)
+npm run sync:fixed-files
+```
+
+**Options:**
+
+- `--dry-run`: Show what would change without modifying branches.
+- `--local`: Sync locally without pushing to GitHub.
+- `--force`: Override working tree cleanliness check.
+
+**Scope:** This script automates sync of `.gitignore`, `.prettierrc`, `package.json`, `README.md`, and other fixed files listed in `maintenance/sync-fixed-files.js`.
+
 ## Curriculum Structure
 
 This project contains lesson branches that represent different stages of React learning. Each branch shows the expected state of a student's project at the end of each week.
