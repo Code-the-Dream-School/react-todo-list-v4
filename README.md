@@ -1,28 +1,5 @@
 # React Todo List V4 (Work in Progress)
 
-> **⚠️ Important Note for Students**  
-> This branch (`09-advanced-state`) includes **Vite proxy configuration** for students whose browsers are configured to reject 3rd-party cookies. Many modern browsers (Chrome, Firefox, Safari, etc.) are moving away from 3rd-party cookie support for privacy and security reasons.
->
-> **Key Changes Made:**
->
-> - **[`vite.config.js`](vite.config.js)** - Added proxy rules for `/api` and `/user` endpoints that route requests through the Vite dev server to the backend, making frontend and backend appear as the same origin
-> - **[`.env.example`](.env.example)** - Updated to show the two-variable approach: `VITE_BASE_URL=/api` (frontend path) and `VITE_BACK_END=https://backend-url` (proxy target)
->
-> **How It Works:**
->
-> 1. Frontend makes requests to `localhost:3001/api/*`
-> 2. Vite proxy intercepts these requests and routes them to the production backend
-> 3. Cookies are treated as first-party (same-site) rather than third-party cookies
-> 4. Authentication works regardless of browser cookie settings
->
-> **To Use This Configuration:**
-> Set your `.env` file to:
->
-> ```dotenv
-> VITE_BASE_URL=/api
-> VITE_BACK_END=https://ctd-learns-node-l42tx.ondigitalocean.app
-> ```
-
 This repo contains an example todo list project that intro to React mentors may use as a reference to evaluate student work. Each branch represents the end state of the student's weekly progress through the curriculum.
 
 ## Running this Application
@@ -46,30 +23,18 @@ This repo contains an example todo list project that intro to React mentors may 
 
 1. **Fork and clone** the repository
 2. **Install dependencies**
-3. **Make the propagation script executable**
-
-```bash
-chmod +x scripts/propagate-changes.sh
-```
 
 ### Contributor Workflow
 
-1. **Choose your starting lesson** based on what you're working on
-2. **Make your changes** on the appropriate lesson branch
+1. **Choose the appropriate lesson branch** based on what you're working on
+2. **Make your changes** on that specific lesson branch
 3. **Test your changes** locally
-4. **Propagate forward** to subsequent lessons:
-
-```bash
-./scripts/propagate-changes.sh forward lesson-02-components
-```
-
-5. **Review propagated changes** on each affected branch
-6. **Create pull requests** for the branches you've modified
+4. **Create pull requests** for the branches you've modified
 
 ### Best Practices for Contributors
 
-- **Start with the earliest lesson** that needs your changes
-- **Test thoroughly** before propagating forward
+- **Work on individual lesson branches** rather than propagating changes
+- **Test thoroughly** on each branch you modify
 - **Write clear commit messages** that explain the educational purpose
 - **Document new concepts** in code comments for student clarity
 - **Keep lesson-specific features** isolated to appropriate branches
@@ -77,143 +42,119 @@ chmod +x scripts/propagate-changes.sh
 
 ### Common Scenarios
 
-#### Adding a New Feature
+#### Adding a New Feature to Multiple Lessons
 
 ```bash
-# Add feature to the appropriate lesson
-git checkout lesson-04-forms
-# ... make changes
+# Add feature to each relevant lesson individually
+git checkout 04-events
+# ... make changes appropriate for this lesson level
 git commit -m "Add form validation for todo input"
 
-# Propagate to subsequent lessons
-./scripts/propagate-changes.sh forward lesson-04-forms
+git checkout 05-controlled-form
+# ... make changes appropriate for this lesson level
+git commit -m "Add form validation with controlled components"
+
+# Continue for other relevant lessons...
 ```
 
-#### Fixing a Bug Across All Lessons
+#### Fixing a Bug Across Multiple Lessons
 
 ```bash
-# Fix on earliest affected lesson
-git checkout lesson-01-basic
+# Fix on each affected lesson branch individually
+git checkout 03-basic-hooks-state
 # ... fix bug
 git commit -m "Fix accessibility issue in todo checkbox"
 
-# Propagate to all subsequent lessons
-./scripts/propagate-changes.sh forward lesson-01-basic
+git checkout 04-events
+# ... fix same bug, adapted for this lesson's code structure
+git commit -m "Fix accessibility issue in todo checkbox"
+
+# Continue for other affected lessons...
 ```
 
 #### Updating Shared Components
 
 ```bash
-# Update on the lesson where component is introduced
-git checkout lesson-02-components
+# Update component on each lesson that uses it
+git checkout 02-components-jsx
 # ... update shared component
 git commit -m "Improve TextInputWithLabel props interface"
 
-# Propagate forward
-./scripts/propagate-changes.sh forward lesson-02-components
+git checkout 03-basic-hooks-state
+# ... update component usage for this lesson's context
+git commit -m "Update TextInputWithLabel usage with hooks"
+
+# Continue for other lessons that use the component...
 ```
 
-## Curriculum Management - Linear Branch Strategy
+## Syncing Fixed Files Across Branches
 
-This project uses a **Linear Branch Strategy** for managing curriculum lessons. Each lesson builds incrementally on the previous one, creating a clear learning progression.
+To keep tooling configuration, documentation, and environment examples consistent across all lesson branches, use the fixed-file sync script.
 
-### Branch Structure
+### Setup (One-Time)
 
-```mermaid
-gitGraph:
-    commit id: "Bootstrap Project"
-    branch lesson-01-setup
-    checkout lesson-01-setup
-    commit id: "Static Todo List"
-    branch lesson-02-components-jsx
-    checkout lesson-02-components-jsx
-    commit id: "Add Components"
-    branch lesson-03-basic-hooks-state
-    checkout lesson-03-basic-hooks-state
-    commit id: "Add State Management"
-    branch lesson-04-events
-    checkout lesson-04-events
-    commit id: "Add Forms"
-    branch lesson-05-controlled-form
-    checkout lesson-05-controlled-form
-    commit id: "Add Controlled Form"
-    branch lesson-06-project-organization
-    checkout lesson-06-project-organization
-    commit id: "Re-organize Project"
-    branch lesson-07-data-fetching
-    checkout lesson-07-data-fetching
-    commit id: "Persist Todos to API"
-    branch lesson-08-optimization-hooks
-    checkout lesson-08-optimization-hooks
-    commit id: "Memoize Search"
-    branch lesson-09-advanced-state
-    checkout lesson-09-advanced-state
-    commit id: "Manage State with Reducer"
-    branch lesson-10-react-router
-    checkout lesson-10-react-router
-    commit id: "Implement Routing"
-    branch lesson-11-deployment-security
-    checkout lesson-11-deployment-security
-    commit id: "Secure and Deploy"
+Make the script executable on your machine:
 
-
-```
-
-### Workflow
-
-#### 1. Manual Branch Setup (One Time)
-
-Create lesson branches manually in order:
+**macOS / Linux:**
 
 ```bash
-git checkout main
-git checkout -b lesson-01-basic
-
-git checkout main
-git checkout -b lesson-02-components
-
-# Continue for each lesson...
+chmod +x maintenance/sync-fixed-files.js
 ```
 
-#### 2. Update the Propagation Script
+**Windows (PowerShell as Administrator):**
 
-Edit the `LESSONS` array in `scripts/propagate-changes.sh` with your actual branch names:
+```powershell
+icacls "maintenance\sync-fixed-files.js" /grant Everyone:F
+```
+
+Alternatively on Windows, you can skip this step—npm will run the script directly via Node.
+
+### Usage
 
 ```bash
-LESSONS=("main" "lesson-01-basic" "lesson-02-components" "lesson-03-state" ...)
+# Validate changes before applying
+npm run sync:fixed-files -- --dry-run
+
+# Sync locally (no GitHub push)
+npm run sync:fixed-files -- --local
+
+# Sync and push to GitHub (default)
+npm run sync:fixed-files
 ```
 
-#### 3. Daily Development Workflow
+**Options:**
 
-```bash
-# Make changes on any lesson branch
-git checkout lesson-02-components
-# ... make your changes
-git add .
-git commit -m "Add TodoForm component"
+- `--dry-run`: Show what would change without modifying branches.
+- `--local`: Sync locally without pushing to GitHub.
+- `--force`: Override working tree cleanliness check.
 
-# Propagate forward to all subsequent lessons
-./scripts/propagate-changes.sh forward lesson-02-components
-```
+**Scope:** This script automates sync of `.gitignore`, `.prettierrc`, `package.json`, `README.md`, and other fixed files listed in `FIXED_FILES` found in `maintenance/sync-fixed-files.js`.
 
-### Available Commands
+## Curriculum Structure
 
-```bash
-# Propagate changes forward from a specific lesson
-./scripts/propagate-changes.sh forward lesson-02-components
+This project contains lesson branches that represent different stages of React learning. Each branch shows the expected state of a student's project at the end of each week.
 
-# Show status of all lesson branches
-./scripts/propagate-changes.sh status
+### Lesson Branches
 
-# Show help and usage information
-./scripts/propagate-changes.sh help
-```
+The curriculum progresses through these branches:
 
-### How It Works
+- **01-setup** - Project setup and basic structure
+- **02-components-jsx** - React components and JSX
+- **03-basic-hooks-state** - useState and basic hooks
+- **04-events** - Event handling and form interactions
+- **05-controlled-form** - Controlled components and forms
+- **06-project-organization** - Code organization and structure
+- **07-data-fetching** - API integration and data management
+- **08-optimization-hooks** - Performance optimization hooks
+- **09-advanced-state** - Advanced state management patterns
+- **10-react-router** - Client-side routing
+- **11-deployment-security** - Production deployment and security
 
-The propagation script:
+### Working with Lesson Branches
 
-1. **Validates** all branches exist before starting
-2. **Merges forward** from your starting lesson through all subsequent lessons
-3. **Stops on conflicts** and provides clear next steps
-4. **Shows progress** with colored output
+Each lesson branch represents a complete, working application at that learning stage. When contributing:
+
+1. **Check out the specific lesson branch** you need to work on
+2. **Make changes appropriate for that lesson's complexity level**
+3. **Test thoroughly** to ensure the lesson works as expected
+4. **Repeat for other relevant lessons** if the change applies to multiple lessons
