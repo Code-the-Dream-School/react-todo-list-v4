@@ -134,7 +134,9 @@ function writeFile(filePath, content) {
   if (flags.dryRun) {
     throw new Error(`[DRY RUN GUARD] Attempted to write file: ${filePath}`);
   }
-  fs.writeFileSync(path.join(repoRoot, filePath), content, 'utf-8');
+  const absolutePath = path.join(repoRoot, filePath);
+  fs.mkdirSync(path.dirname(absolutePath), { recursive: true });
+  fs.writeFileSync(absolutePath, content, 'utf-8');
 }
 
 function getCurrentBranch() {
