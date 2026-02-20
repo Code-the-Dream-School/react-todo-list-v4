@@ -98,7 +98,36 @@ function readFile(filePath) {
   }
 }
 
+function resolveBranchRef(branch) {
+  try {
+    exec(`git rev-parse --verify ${branch}`, { throwOnError: true });
+    return branch;
+  } catch {
+    try {
+      exec(`git rev-parse --verify origin/${branch}`, { throwOnError: true });
+      return `origin/${branch}`;
+    } catch {
+      return branch;
+    }
+  }
+}
+
+function readFileFromRef(ref, filePath) {
+  const normalizedPath = filePath.replace(/\\/g, '/');
+  try {
+    return exec(`git show ${ref}:${normalizedPath}`, {
+      stdio: 'pipe',
+      throwOnError: true,
+    });
+  } catch {
+    return null;
+  }
+}
+
 function writeFile(filePath, content) {
+  if (flags.dryRun) {
+    throw new Error(`[DRY RUN GUARD] Attempted to write file: ${filePath}`);
+  }
   fs.writeFileSync(path.join(repoRoot, filePath), content, 'utf-8');
 }
 
@@ -203,9 +232,10 @@ async function probeAuth() {
 function getSourceFiles() {
   const files = {};
   const allFiles = [...FIXED_FILES, ...getMaintenanceFiles()];
+  const sourceRef = resolveBranchRef(SOURCE_BRANCH);
 
   for (const file of allFiles) {
-    const content = readFile(file);
+    const content = readFileFromRef(sourceRef, file);
     if (content !== null) {
       files[file] = content;
     }
@@ -217,6 +247,23 @@ function getSourceFiles() {
 // Apply files to target branch
 function applyFilesToBranch(branch, sourceFiles, dryRun = false) {
   const originalBranch = getCurrentBranch();
+  const branchRef = resolveBranchRef(branch);
+
+  // Strict dry-run guard: prevent any mutations
+  if (dryRun && flags.dryRun) {
+    try {
+      const changes = [];
+      for (const [file, content] of Object.entries(sourceFiles)) {
+        const currentContent = readFileFromRef(branchRef, file);
+        if (currentContent !== content) {
+          changes.push(file);
+        }
+      }
+      return { success: true, changes, branch };
+    } catch (error) {
+      return { success: false, error: error.message, branch };
+    }
+  }
 
   try {
     if (!dryRun) {
@@ -230,7 +277,9 @@ function applyFilesToBranch(branch, sourceFiles, dryRun = false) {
 
     const changes = [];
     for (const [file, content] of Object.entries(sourceFiles)) {
-      const currentContent = readFile(file);
+      const currentContent = dryRun
+        ? readFileFromRef(branchRef, file)
+        : readFile(file);
       if (currentContent !== content) {
         changes.push(file);
         if (!dryRun) {
