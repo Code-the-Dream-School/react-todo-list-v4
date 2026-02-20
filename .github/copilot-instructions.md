@@ -9,7 +9,7 @@ This is a **progressive curriculum project in the form of a todo app** with 11 l
 ### Linear Branch Strategy
 
 - **11 lesson branches** (01-setup → 11-deployment-security) build on each other linearly
-- If a change affects multiple lessons, apply it starting at the earliest affected lesson and continue forward branch-by-branch.
+- Changes propagate forward using `./scripts/propagate-changes.sh forward [branch]`
 - **NEVER** make changes directly on advanced branches - always start from the earliest affected lesson
 - Each branch represents a specific learning milestone with targeted features
 
@@ -46,22 +46,21 @@ src/
 git checkout 02-components-jsx
 # Make your changes
 git commit -m "Add TodoForm component"
-# Move to the next lesson branch and merge/cherry-pick as needed
-git checkout 03-basic-hooks-state
+# Propagate forward to all subsequent lessons
+./scripts/propagate-changes.sh forward 02-components-jsx
 ```
 
 ### Branch Management
 
-- Use `git branch --list` to inspect available lesson branches
-- Use standard Git merge/cherry-pick workflows to carry changes forward
-- Resolve merge conflicts branch-by-branch with clear commit messages
+- Use `./scripts/propagate-changes.sh status` to see all lesson states
+- Use `./scripts/propagate-changes.sh create-branches` to create missing branches
+- Script handles merge conflicts gracefully - stops and provides clear next steps
 
 ### Development Commands
 
 - `npm run dev` - Vite dev server (port 5173)
 - `npm run lint:fix` - Auto-fix ESLint + Prettier issues
 - `npm run format` - Format all files with Prettier
-- `npm run sync:fixed-files` - Sync fixed configuration and documentation files from `main` to all lesson branches (see README.md for usage)
 
 ## Code Conventions
 
