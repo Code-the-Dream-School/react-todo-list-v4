@@ -128,7 +128,7 @@ npm run sync:fixed-files
 - `--local`: Sync locally without pushing to GitHub.
 - `--force`: Override working tree cleanliness check.
 
-**Scope:** This script automates sync of `.gitignore`, `.prettierrc`, `package.json`, `README.md`, and other fixed files listed in `maintenance/sync-fixed-files.js`.
+**Scope:** This script automates sync of `.gitignore`, `.prettierrc`, `package.json`, `README.md`, and other fixed files listed in `FIXED_FILES` found in `maintenance/sync-fixed-files.js`.
 
 ## Curriculum Structure
 
