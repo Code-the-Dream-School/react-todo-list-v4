@@ -296,11 +296,13 @@ function applyFilesToBranch(branch, sourceFiles, dryRun = false) {
 
   try {
     if (!dryRun) {
-      // Try to checkout local branch, or create it from remote if it doesn't exist locally
-      try {
-        exec(`git checkout ${branch}`);
-      } catch {
+      // Checkout branch - handle existing local branch vs new remote-only branch
+      if (!branchExists(branch)) {
+        // Branch doesn't exist locally—create tracking branch
         exec(`git checkout --track origin/${branch}`);
+      } else {
+        // Branch exists locally—just checkout
+        exec(`git checkout ${branch}`);
       }
     }
 
@@ -312,7 +314,16 @@ function applyFilesToBranch(branch, sourceFiles, dryRun = false) {
       if (currentContent !== content) {
         changes.push(file);
         if (!dryRun) {
-          writeFile(file, content);
+          try {
+            writeFile(file, content);
+          } catch (writeError) {
+            // File doesn't exist on this branch yet—skip it and remove from changes
+            if (writeError.code === 'ENOENT') {
+              changes.pop();
+            } else {
+              throw writeError;
+            }
+          }
         }
       }
     }
@@ -352,7 +363,7 @@ async function syncBranches(sourceFiles) {
       }
     } else {
       results[branch] = { status: 'failed', error: result.error };
-      log(`${branch}: sync failed`, 'error');
+      log(`${branch}: sync failed - ${result.error}`, 'error');
     }
   }
 
