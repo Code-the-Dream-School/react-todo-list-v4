@@ -166,6 +166,17 @@ function getMaintenanceFiles() {
     .map((f) => `maintenance/${f}`);
 }
 
+function getGitHubUsername() {
+  try {
+    const remoteUrl = exec('git config --get remote.origin.url').trim();
+    // Match https://github.com/username/repo.git or git@github.com:username/repo.git
+    const match = remoteUrl.match(/(?:https:\/\/github\.com\/|git@github\.com:)([^/]+)/);
+    return match ? match[1] : null;
+  } catch {
+    return null;
+  }
+}
+
 // Preflight checks
 async function runPreflights() {
   log('Running preflight checks...');
@@ -220,7 +231,11 @@ async function probeAuth() {
   try {
     // Use git ls-remote to check remote connectivity without modifying anything
     exec('git ls-remote origin HEAD', { stdio: 'pipe' });
-    log('Remote access confirmed', 'success');
+    const username = getGitHubUsername();
+    const message = username
+      ? `Remote access confirmed (authenticated as ${username})`
+      : 'Remote access confirmed';
+    log(message, 'success');
     return true;
   } catch {
     log('Unable to reach remote or authenticate', 'warn');
