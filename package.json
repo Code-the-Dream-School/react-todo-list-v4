@@ -10,7 +10,8 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "sync:fixed-files": "node maintenance/sync-fixed-files.js"
   },
   "dependencies": {
     "react": "^19.2.0",
