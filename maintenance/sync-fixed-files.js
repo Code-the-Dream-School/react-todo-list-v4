@@ -168,9 +168,23 @@ function getMaintenanceFiles() {
 
 function getGitHubUsername() {
   try {
+    // Try to get authenticated user from git config
+    const configUser = exec('git config user.name', {
+      throwOnError: true,
+    }).trim();
+    if (configUser) {
+      return configUser;
+    }
+  } catch {
+    // Fall back to remote origin owner if local config not available
+  }
+
+  try {
     const remoteUrl = exec('git config --get remote.origin.url').trim();
     // Match https://github.com/username/repo.git or git@github.com:username/repo.git
-    const match = remoteUrl.match(/(?:https:\/\/github\.com\/|git@github\.com:)([^/]+)/);
+    const match = remoteUrl.match(
+      /(?:https:\/\/github\.com\/|git@github\.com:)([^/]+)/
+    );
     return match ? match[1] : null;
   } catch {
     return null;
