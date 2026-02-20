@@ -397,13 +397,6 @@ async function syncBranches(sourceFiles) {
   return { results, changedBranches };
 }
 
-// Commit changes (note: changes are committed immediately in applyFilesToBranch)
-async function commitChanges(changedBranches) {
-  // Changes are already committed during applyFilesToBranch to avoid checkout conflicts
-  // This function is kept for compatibility but doesn't need to do anything
-  return;
-}
-
 // Push changes
 async function pushChanges(changedBranches) {
   if (flags.local) {
@@ -510,9 +503,6 @@ async function main() {
       log('\nNo changes to commit.', 'success');
       process.exit(0);
     }
-
-    // Commit
-    await commitChanges(changedBranches);
 
     // Push or ask for confirmation
     let pushResults = { pushed: [], failed: [] };
