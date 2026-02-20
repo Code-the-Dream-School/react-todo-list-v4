@@ -328,12 +328,24 @@ function applyFilesToBranch(branch, sourceFiles, dryRun = false) {
       }
     }
 
+    // Commit changes immediately to avoid checkout conflicts on next branch
+    if (!dryRun && changes.length > 0) {
+      exec('git add .', { throwOnError: false });
+      exec(
+        'git commit -m "chore: sync fixed files from main\n\nAutomated sync of tooling configuration, documentation, and environment examples across lesson branches."',
+        { throwOnError: false }
+      );
+    }
+
     return { success: true, changes, branch };
   } catch (error) {
     return { success: false, error: error.message, branch };
   } finally {
     if (!dryRun) {
       try {
+        // Clean working tree before returning to original branch
+        exec('git clean -fd', { throwOnError: false });
+        exec('git checkout -- .', { throwOnError: false });
         exec(`git checkout ${originalBranch}`);
       } catch {
         // Ignore checkout errors during cleanup
@@ -370,30 +382,11 @@ async function syncBranches(sourceFiles) {
   return { results, changedBranches };
 }
 
-// Commit changes
+// Commit changes (note: changes are committed immediately in applyFilesToBranch)
 async function commitChanges(changedBranches) {
-  log('\nCommitting changes to target branches...');
-
-  for (const branch of changedBranches) {
-    try {
-      exec(`git checkout ${branch}`);
-      exec('git add .');
-      exec(
-        'git commit -m "chore: sync fixed files from main\n\nAutomated sync of tooling configuration, documentation, and environment examples across lesson branches."'
-      );
-      log(`${branch}: committed`, 'success');
-    } catch (error) {
-      log(`${branch}: commit failed - ${error.message}`, 'error');
-    }
-  }
-
-  // Return to original branch
-  const originalBranch = getCurrentBranch();
-  try {
-    exec(`git checkout ${originalBranch}`);
-  } catch {
-    // Ignore
-  }
+  // Changes are already committed during applyFilesToBranch to avoid checkout conflicts
+  // This function is kept for compatibility but doesn't need to do anything
+  return;
 }
 
 // Push changes
