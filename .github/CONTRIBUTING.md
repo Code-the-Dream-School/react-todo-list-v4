@@ -2,7 +2,7 @@
 
 ## About This Repository
 
-This repository contains an example todo list project used as a reference for Code the Dream's intro to React curriculum. Mentors use it to evaluate student work at each stage of the course. Each branch represents the expected end state of a student's project at the end of a specific lesson week, progressing from basic React setup through deployment and security.
+This repository contains an example todo list project used as a reference for Code the Dream's intro to React curriculum. Mentors use it to evaluate student work at each stage of the course. Each branch represents the approximate end state of a student's project at the end of a specific lesson week, progressing from basic React setup through deployment and security.
 
 The project is intentionally structured for **educational clarity** rather than production patterns — explicit, well-commented code is preferred over clever abstractions.
 
