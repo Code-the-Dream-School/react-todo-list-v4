@@ -1,7 +1,5 @@
 import { createContext, useContext, useState } from 'react';
 
-const baseUrl = import.meta.env.VITE_BASE_URL;
-
 // Create the Auth Context
 export const AuthContext = createContext();
 
@@ -19,6 +17,19 @@ export function AuthProvider({ children }) {
   const [name, setName] = useState('');
   const [token, setToken] = useState('');
 
+  const parseJsonSafely = async (response) => {
+    const contentType = response.headers.get('content-type') || '';
+    if (!contentType.includes('application/json')) {
+      return null;
+    }
+
+    try {
+      return await response.json();
+    } catch {
+      return null;
+    }
+  };
+
   // Login function
   const login = async (userEmail, password) => {
     const options = {
@@ -28,8 +39,8 @@ export function AuthProvider({ children }) {
       credentials: 'include',
     };
 
-    const res = await fetch(`${baseUrl}/users/logon`, options);
-    const data = await res.json();
+    const res = await fetch(`/api/users/logon`, options);
+    const data = await parseJsonSafely(res);
 
     if (res.status === 200 && data.name && data.csrfToken) {
       setName(data.name);
@@ -38,7 +49,7 @@ export function AuthProvider({ children }) {
     } else {
       return {
         success: false,
-        error: `Authentication failed: ${data?.message}`,
+        error: `Authentication failed: ${data?.message || 'Unable to log in'}`,
       };
     }
   };
@@ -61,17 +72,17 @@ export function AuthProvider({ children }) {
         credentials: 'include',
       };
 
-      const res = await fetch(`${baseUrl}/user/logoff`, options);
+      const res = await fetch(`/api/users/logoff`, options);
 
       if (res.status === 200 || res.status === 401) {
         setName('');
         setToken('');
         return { success: true };
       } else {
-        const data = await res.json();
+        const data = await parseJsonSafely(res);
         return {
           success: false,
-          error: data.message || 'Logoff failed',
+          error: data?.message || 'Logoff failed',
         };
       }
     } catch {
