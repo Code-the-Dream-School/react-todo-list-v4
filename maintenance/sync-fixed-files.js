@@ -25,8 +25,6 @@ const TARGET_BRANCHES = [
   '10-react-router',
   '11-deployment-security',
   'deploy',
-  'deploy-vercel',
-  'local-dev-vite-proxy',
 ];
 
 const FIXED_FILES = [
