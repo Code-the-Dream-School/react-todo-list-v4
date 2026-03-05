@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 
-const baseUrl = import.meta.env.VITE_BASE_URL;
-
 function ProfilePage() {
   const { name, token } = useAuth();
   const [todoStats, setTodoStats] = useState({
@@ -29,7 +27,7 @@ function ProfilePage() {
           credentials: 'include',
         };
 
-        const response = await fetch(`${baseUrl}/tasks`, options);
+        const response = await fetch('/api/tasks', options);
 
         if (response.status === 401) {
           throw new Error('Unauthorized');
