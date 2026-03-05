@@ -1,8 +1,6 @@
 import { useState } from 'react';
 
 function Logon({ onSetEmail, onSetToken }) {
-  const baseUrl = import.meta.env.VITE_BASE_URL;
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [authError, setAuthError] = useState('');
@@ -18,7 +16,7 @@ function Logon({ onSetEmail, onSetToken }) {
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
       };
-      const res = await fetch(`${baseUrl}/users/logon`, options);
+      const res = await fetch('/api/users/logon', options);
       const data = await res.json();
       console.dir(res);
       if (res.status === 200 && data.name && data.csrfToken) {
