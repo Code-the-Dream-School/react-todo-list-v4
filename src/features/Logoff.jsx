@@ -1,7 +1,5 @@
 import { useState } from 'react';
 
-const baseUrl = import.meta.env.VITE_BASE_URL;
-
 function Logoff({ token, onSetToken, onSetEmail }) {
   const [error, setError] = useState('');
   const [isLoggingOff, setIsLoggingOff] = useState(false);
@@ -15,7 +13,7 @@ function Logoff({ token, onSetToken, onSetEmail }) {
         },
         credentials: 'include',
       };
-      const res = await fetch(`${baseUrl}/users/logoff`, options);
+      const res = await fetch('/api/users/logoff', options);
       if (res.status === 200 || res.status === 401) {
         onSetEmail('');
         onSetToken('');
