@@ -33,32 +33,15 @@ Any changes to documentation or maintenance scripts must remain synced between a
 npm run hooks:install
 ```
 
-4. **Complete one-time sync script setup** before using branch sync commands (macOS/Linux only):
-
-> [!WARNING]
-> Making a file executable should be reserved only for scripts that you fully trust. Review `maintenance/sync-fixed-files.js` before making it executable.
-
-**macOS / Linux:**
-
-```bash
-chmod +x maintenance/sync-fixed-files.js
-```
-
-**Windows (PowerShell as Administrator):**
-
-```powershell
-icacls "maintenance\sync-fixed-files.js" /grant Everyone:F
-```
-
-Windows note: you can skip this step; npm will run the script directly via Node.
-
-5. **Sync local branches with GitHub** after setup:
+4. **Sync local branches with GitHub** after setup:
 
 ```bash
 npm run sync:from-origin
 ```
 
 `sync:from-origin` is the recommended starting command for this repo. Most changes eventually propagate across multiple lesson branches, and this keeps local branches current to speed up branch-to-branch development.
+
+Note: `sync:fixed-files` and `sync:from-origin` are designed to run through npm scripts, so executable permissions on `maintenance/sync-fixed-files.js` are not required.
 
 ### Contributor Workflow
 
@@ -109,7 +92,7 @@ git commit -m "Fix accessibility issue in todo checkbox"
 
 ## Branch Syncing: Fixed Files Across Branches
 
-To keep tooling configuration, documentation, and environment examples consistent across all lesson branches, use the fixed-file sync script.
+To keep tooling, documentation, repository automation files, and maintenance files consistent across lesson branches, use the fixed-file sync script.
 
 ```bash
 npm run sync:fixed-files
@@ -134,7 +117,7 @@ npm run sync:fixed-files
 - `--local`: Sync locally without pushing to GitHub.
 - `--force`: Override working tree cleanliness check.
 
-**Scope:** This script automates sync of `.gitignore`, `.prettierrc`, `package.json`, `README.md`, and other fixed files listed in `FIXED_FILES` found in `maintenance/fixed-files-config.js`.
+**Scope:** This script syncs files matched by `isFixedFile` in `maintenance/fixed-files-config.js`. That includes explicit files in `FIXED_FILES` plus files under configured fixed directories such as `maintenance/`, `.githooks/`, and `.github/`.
 
 ## Branch Syncing: Local Branches From Origin
 
