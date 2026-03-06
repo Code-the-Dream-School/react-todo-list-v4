@@ -6,7 +6,7 @@ import { execSync } from 'child_process';
 import readline from 'readline';
 import { fileURLToPath } from 'url';
 import process from 'process';
-import { FIXED_FILES } from './fixed-files-config.js';
+import { isFixedFile } from './fixed-files-config.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, '..');
@@ -175,15 +175,16 @@ function isWorkingTreeClean() {
   return status.trim() === '';
 }
 
-function getMaintenanceFiles() {
-  const mainDir = path.join(repoRoot, 'maintenance');
-  if (!fs.existsSync(mainDir)) {
-    return [];
-  }
-  return fs
-    .readdirSync(mainDir)
-    .filter((f) => !f.startsWith('.'))
-    .map((f) => `maintenance/${f}`);
+function getFixedFilesFromRef(ref) {
+  const output = exec(`git ls-tree -r --name-only ${ref}`, {
+    throwOnError: true,
+  });
+
+  return output
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .filter(isFixedFile);
 }
 
 function getGitHubUsername() {
@@ -348,8 +349,8 @@ async function probeAuth() {
 // Get synced files from source
 function getSourceFiles() {
   const files = {};
-  const allFiles = [...FIXED_FILES, ...getMaintenanceFiles()];
   const sourceRef = resolveBranchRef(SOURCE_BRANCH);
+  const allFiles = getFixedFilesFromRef(sourceRef);
 
   for (const file of allFiles) {
     const content = readFileFromRef(sourceRef, file);
