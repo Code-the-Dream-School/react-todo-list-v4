@@ -11,7 +11,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "preview": "vite preview",
-    "hooks:install": "git config core.hooksPath .githooks && chmod +x .githooks/pre-commit",
+    "hooks:install": "node maintenance/install-hooks.js",
+    "setup:first-time": "npm run hooks:install && npm run sync:from-origin",
     "sync:fixed-files": "node maintenance/sync-fixed-files.js",
     "sync:from-origin": "node maintenance/sync-fixed-files.js --from-origin"
   },
