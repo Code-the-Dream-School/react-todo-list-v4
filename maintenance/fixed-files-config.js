@@ -9,4 +9,5 @@ export const FIXED_FILES = Object.freeze([
   '.env.example',
   'README.md',
   'vercel.json',
+  '.githooks/pre-commit',
 ]);
