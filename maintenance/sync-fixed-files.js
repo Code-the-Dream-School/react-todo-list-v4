@@ -46,6 +46,7 @@ const flags = {
   dryRun: args.includes('--dry-run'),
   local: args.includes('--local'),
   force: args.includes('--force'),
+  fromOrigin: args.includes('--from-origin'),
 };
 
 // Parse optional --message flag
@@ -63,6 +64,14 @@ function log(message, level = 'info') {
     error: '✗',
   }[level];
   console.log(`[${timestamp}] ${prefix} ${message}`);
+}
+
+function logOp(operation, success, detail = '') {
+  const suffix = detail ? ` ${detail}` : '';
+  log(
+    `${success ? 'OK' : 'FAIL'} ${operation}${suffix}`,
+    success ? 'success' : 'error'
+  );
 }
 
 function exec(command, options = {}) {
@@ -139,6 +148,23 @@ function writeFile(filePath, content) {
 
 function getCurrentBranch() {
   return exec('git rev-parse --abbrev-ref HEAD').trim();
+}
+
+function checkoutBranch(branch) {
+  const hasLocal =
+    exec(`git show-ref --verify --quiet refs/heads/${branch}`, {
+      throwOnError: false,
+    }) !== null;
+
+  if (hasLocal) {
+    exec(`git checkout ${branch}`);
+    return;
+  }
+
+  exec(`git show-ref --verify --quiet refs/remotes/origin/${branch}`, {
+    throwOnError: true,
+  });
+  exec(`git checkout -b ${branch} --track origin/${branch}`);
 }
 
 function branchExists(branch) {
@@ -238,6 +264,74 @@ async function runPreflights() {
   }
 
   log('All preflight checks passed', 'success');
+}
+
+function getSyncBranchesFromOrigin() {
+  return [...new Set([SOURCE_BRANCH, ...TARGET_BRANCHES])];
+}
+
+async function syncBranchesFromOrigin() {
+  const branches = getSyncBranchesFromOrigin();
+  const results = [];
+  const originalBranch = getCurrentBranch();
+
+  if (!isWorkingTreeClean()) {
+    logOp('preflight clean-worktree', false, '(uncommitted changes detected)');
+    return { success: false, results, reason: 'dirty-worktree' };
+  }
+  logOp('preflight clean-worktree', true);
+
+  try {
+    exec('git fetch origin --prune');
+    logOp('fetch origin', true);
+  } catch (error) {
+    logOp('fetch origin', false, `(${error.message.split('\n')[0]})`);
+    return { success: false, results, reason: 'fetch-failed' };
+  }
+
+  for (const branch of branches) {
+    try {
+      checkoutBranch(branch);
+      logOp(`checkout ${branch}`, true);
+    } catch (error) {
+      const detail = error.message.split('\n')[0];
+      logOp(`checkout ${branch}`, false, `(${detail})`);
+      results.push({
+        branch,
+        status: 'failed',
+        step: 'checkout',
+        error: detail,
+      });
+      continue;
+    }
+
+    try {
+      exec(`git pull --ff-only origin ${branch}`);
+      logOp(`pull ${branch}`, true);
+      results.push({ branch, status: 'synced' });
+    } catch (error) {
+      const detail = error.message.split('\n')[0];
+      logOp(`pull ${branch}`, false, `(${detail})`);
+      results.push({ branch, status: 'failed', step: 'pull', error: detail });
+    }
+  }
+
+  try {
+    checkoutBranch(SOURCE_BRANCH);
+    logOp(`final checkout ${SOURCE_BRANCH}`, true);
+  } catch (error) {
+    const detail = error.message.split('\n')[0];
+    logOp(`final checkout ${SOURCE_BRANCH}`, false, `(${detail})`);
+    return {
+      success: false,
+      results,
+      reason: 'final-checkout-failed',
+      originalBranch,
+    };
+  }
+
+  const hasFailures = results.some((result) => result.status === 'failed');
+  return { success: !hasFailures, results, originalBranch };
 }
 
 // Auth probe (checks if push would succeed)
@@ -469,6 +563,12 @@ function printSummary(results, pushResults) {
 // Main flow
 async function main() {
   try {
+    if (flags.fromOrigin) {
+      log('Starting origin branch sync');
+      const originSyncResult = await syncBranchesFromOrigin();
+      process.exit(originSyncResult.success ? 0 : 1);
+    }
+
     log('Starting fixed-file sync');
     log(
       `Mode: ${flags.dryRun ? 'dry-run' : flags.local ? 'local-only' : 'default (push enabled)'}`
