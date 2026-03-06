@@ -2,9 +2,7 @@
 
 import { execSync } from 'child_process';
 import process from 'process';
-import { FIXED_FILES } from './fixed-files-config.js';
-
-const fixedFileSet = new Set(FIXED_FILES);
+import { isFixedFile } from './fixed-files-config.js';
 
 function getStagedFiles() {
   try {
@@ -22,10 +20,6 @@ function getStagedFiles() {
   } catch {
     return [];
   }
-}
-
-function isFixedFile(filePath) {
-  return fixedFileSet.has(filePath) || filePath.startsWith('maintenance/');
 }
 
 function main() {
