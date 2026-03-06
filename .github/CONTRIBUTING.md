@@ -19,7 +19,7 @@ This repo uses a branch-per-lesson version control strategy.
 
 If a fix applies to multiple lessons, start on the earliest affected branch and then manually carry the change forward (or use `git cherry-pick` if appropriate) branch-by-branch so each lesson stays accurate for its learning stage. If you cannot make PRs to all branches affected, open an issue ticket instead of submitting a PR for partial work.
 
-Any changes to documentation or maintenance scripts must remain synced between all branches. This repo provides a script (explained later) that automates syncing.
+Any changes to documentation or maintenance scripts must remain synced between all branches. This repo provides maintenance scripts described in the [Maintenance Scripts](#maintenance-scripts) section to automate syncing.
 
 ## Developer Workflow
 
@@ -90,7 +90,9 @@ git commit -m "Fix accessibility issue in todo checkbox"
 # Continue for other affected lessons...
 ```
 
-## Branch Syncing: Fixed Files Across Branches
+## Maintenance Scripts
+
+### Propagate Fixed Files Across Branches (`sync:fixed-files`)
 
 To keep tooling, documentation, repository automation files, and maintenance files consistent across lesson branches, use the fixed-file sync script.
 
@@ -98,7 +100,7 @@ To keep tooling, documentation, repository automation files, and maintenance fil
 npm run sync:fixed-files
 ```
 
-### Usage
+### Usage (`sync:fixed-files`)
 
 ```bash
 # Validate changes before applying
@@ -119,9 +121,9 @@ npm run sync:fixed-files
 
 **Scope:** This script syncs files matched by `isFixedFile` in `maintenance/fixed-files-config.js`. That includes explicit files in `FIXED_FILES` plus files under configured fixed directories such as `maintenance/`, `.githooks/`, and `.github/`.
 
-## Branch Syncing: Local Branches From Origin
+### Update Local Lesson Branches From Origin (`sync:from-origin`)
 
-This command fetches from `origin`, then fast-forwards `main` and all lesson branches locally. It supports this repo's branch-per-lesson version-control model by keeping every curriculum branch aligned with GitHub before you start or review work.
+This command fetches from `origin`, then fast-forwards `main` and all lesson branches locally. If a local lesson branch does not exist yet, it creates a local tracking branch from `origin/<branch>` before syncing. It supports this repo's branch-per-lesson version-control model by keeping every curriculum branch aligned with GitHub before you start or review work.
 
 Recommended first step:
 
@@ -129,7 +131,7 @@ Recommended first step:
 npm run sync:from-origin
 ```
 
-### Usage
+### Usage (`sync:from-origin`)
 
 ```bash
 # Update all local lesson branches from origin
