@@ -17,7 +17,7 @@ This repo uses a branch-per-lesson version control strategy.
 - `01-setup` through `11-deployment-security` are each a snapshot of the application code as it should be at the conclusion of the assignment for that lesson.
 - `deploy` is reserved for a hosted version of the app that includes registration functionality for students to create an account.
 
-If a fix applies to multiple lessons, start on the earliest affected branch and then manually carry the change forward (or use `git cherry-pick` if appropriate) branch-by-branch so each lesson stays accurate for its learning stage. If you cannot make PR's to all branches affected, open an issue ticket instead of submitting a PR for partial work.
+If a fix applies to multiple lessons, start on the earliest affected branch and then manually carry the change forward (or use `git cherry-pick` if appropriate) branch-by-branch so each lesson stays accurate for its learning stage. If you cannot make PRs to all branches affected, open an issue ticket instead of submitting a PR for partial work.
 
 Any changes to documentation or maintenance scripts must remain synced between all branches. This repo provides a script (explained later) that automates syncing.
 
@@ -27,8 +27,38 @@ Any changes to documentation or maintenance scripts must remain synced between a
 
 1. **Fork and clone** the repository
 2. **Install dependencies**
-3. **Install repository git hooks**: run `npm run hooks:install` so pre-commit reminders are enabled.
-5. **Sync local branches with GitHub**: instructions found in `Syncing Script Setup (One-Time)` section under `Syncing Fixed Files Across Branches` before using branch sync commands.
+3. **Install repository git hooks** so pre-commit reminders are enabled:
+
+```bash
+npm run hooks:install
+```
+
+4. **Complete one-time sync script setup** before using branch sync commands (macOS/Linux only):
+
+> [!WARNING]
+> Making a file executable should be reserved only for scripts that you fully trust. Review `maintenance/sync-fixed-files.js` before making it executable.
+
+**macOS / Linux:**
+
+```bash
+chmod +x maintenance/sync-fixed-files.js
+```
+
+**Windows (PowerShell as Administrator):**
+
+```powershell
+icacls "maintenance\sync-fixed-files.js" /grant Everyone:F
+```
+
+Windows note: you can skip this step; npm will run the script directly via Node.
+
+5. **Sync local branches with GitHub** after setup:
+
+```bash
+npm run sync:from-origin
+```
+
+`sync:from-origin` is the recommended starting command for this repo. Most changes eventually propagate across multiple lesson branches, and this keeps local branches current to speed up branch-to-branch development.
 
 ### Contributor Workflow
 
@@ -77,7 +107,7 @@ git commit -m "Fix accessibility issue in todo checkbox"
 # Continue for other affected lessons...
 ```
 
-## Syncing Fixed Files Across Branches
+## Branch Syncing: Fixed Files Across Branches
 
 To keep tooling configuration, documentation, and environment examples consistent across all lesson branches, use the fixed-file sync script.
 
@@ -85,43 +115,9 @@ To keep tooling configuration, documentation, and environment examples consisten
 npm run sync:fixed-files
 ```
 
-## Syncing Script
-
-### Setup (One-Time)
-
-To use this command, you'll need to make the script executable on your machine:
-
-> [!WARNING]
-> Making a file executable should be reserved only for scripts that you fully trust! Review `maintenance/sync-fixed-files.js` to make sure you understand what it does before making it executable.
-
-**macOS / Linux:**
-
-```bash
-chmod +x maintenance/sync-fixed-files.js
-```
-
-**Windows (PowerShell as Administrator):**
-
-```powershell
-icacls "maintenance\sync-fixed-files.js" /grant Everyone:F
-```
-
-Alternatively on Windows, you can skip this step; npm will run the script directly via Node.
-
-After making the script executable, run this once to update all local lesson branches from GitHub origin and return to `main`:
-
-```bash
-npm run sync:from-origin
-```
-
-This command fetches from `origin`, then fast-forwards `main` and all lesson branches locally. It supports this repo's branch-per-lesson version-control model by keeping every curriculum branch aligned with GitHub before you start or review work.
-
 ### Usage
 
 ```bash
-# Update all local lesson branches from origin
-npm run sync:from-origin
-
 # Validate changes before applying
 npm run sync:fixed-files -- --dry-run
 
@@ -138,7 +134,24 @@ npm run sync:fixed-files
 - `--local`: Sync locally without pushing to GitHub.
 - `--force`: Override working tree cleanliness check.
 
-**Scope:** This script automates sync of `.gitignore`, `.prettierrc`, `package.json`, `README.md`, and other fixed files listed in `FIXED_FILES` found in `maintenance/sync-fixed-files.js`.
+**Scope:** This script automates sync of `.gitignore`, `.prettierrc`, `package.json`, `README.md`, and other fixed files listed in `FIXED_FILES` found in `maintenance/fixed-files-config.js`.
+
+## Branch Syncing: Local Branches From Origin
+
+This command fetches from `origin`, then fast-forwards `main` and all lesson branches locally. It supports this repo's branch-per-lesson version-control model by keeping every curriculum branch aligned with GitHub before you start or review work.
+
+Recommended first step:
+
+```bash
+npm run sync:from-origin
+```
+
+### Usage
+
+```bash
+# Update all local lesson branches from origin
+npm run sync:from-origin
+```
 
 ## Code of Conduct
 
