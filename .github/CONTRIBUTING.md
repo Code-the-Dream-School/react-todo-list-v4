@@ -27,21 +27,13 @@ Any changes to documentation or maintenance scripts must remain synced between a
 
 1. **Fork and clone** the repository
 2. **Install dependencies**
-3. **Install repository git hooks** so pre-commit reminders are enabled:
+3. **Run first-time setup** (highly recommended):
 
 ```bash
-npm run hooks:install
+npm run setup:first-time
 ```
 
-4. **Sync local branches with GitHub** after setup:
-
-```bash
-npm run sync:from-origin
-```
-
-`sync:from-origin` is the recommended starting command for this repo. Most changes eventually propagate across multiple lesson branches, and this keeps local branches current to speed up branch-to-branch development.
-
-Note: `sync:fixed-files` and `sync:from-origin` are designed to run through npm scripts, so executable permissions on `maintenance/sync-fixed-files.js` are not required.
+This command installs repository git hooks and syncs local lesson branches from `origin` in one step.
 
 ### Contributor Workflow
 
