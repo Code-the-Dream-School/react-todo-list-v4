@@ -6,6 +6,7 @@ import { execSync } from 'child_process';
 import readline from 'readline';
 import { fileURLToPath } from 'url';
 import process from 'process';
+import { FIXED_FILES } from './fixed-files-config.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, '..');
@@ -25,19 +26,6 @@ const TARGET_BRANCHES = [
   '10-react-router',
   '11-deployment-security',
   'deploy',
-];
-
-const FIXED_FILES = [
-  '.gitignore',
-  '.prettierignore',
-  '.prettierrc',
-  'eslint.config.js',
-  'vite.config.js',
-  'package.json',
-  'package-lock.json',
-  '.env.example',
-  'README.md',
-  'vercel.json',
 ];
 
 // Parse CLI flags
