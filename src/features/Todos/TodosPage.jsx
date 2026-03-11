@@ -73,7 +73,7 @@ function TodosPage({ token }) {
     };
 
     // Optimistic update
-    setTodoList((currentList) => [...currentList, newTodo]);
+    setTodoList((currentList) => [newTodo, ...currentList]);
 
     try {
       const options = {
