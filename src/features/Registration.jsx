@@ -117,27 +117,37 @@ function Registration() {
         />
       </fieldset>
 
-      <fieldset>
-        <legend>Verification</legend>
-        <p id='recaptcha-help'>
-          Complete the reCAPTCHA challenge. If you need a non-visual option, use
-          the audio challenge available in the widget.
-        </p>
-        <div aria-describedby='recaptcha-help'>
-          <ReCAPTCHA
-            sitekey={siteKey}
-            onChange={(token) => setRecaptchaToken(token || '')}
-            onExpired={() => setRecaptchaToken('')}
-            onErrored={() =>
-              setRegError(
-                'The reCAPTCHA challenge could not be loaded. Please try again.'
-              )
-            }
-          />
-        </div>
-      </fieldset>
+      {siteKey ? (
+        <fieldset>
+          <legend>Verification</legend>
+          <p id='recaptcha-help'>
+            Complete the reCAPTCHA challenge. If you need a non-visual option,
+            use the audio challenge available in the widget.
+          </p>
+          <div aria-describedby='recaptcha-help'>
+            <ReCAPTCHA
+              sitekey={siteKey}
+              onChange={(token) => setRecaptchaToken(token || '')}
+              onExpired={() => setRecaptchaToken('')}
+              onErrored={() =>
+                setRegError(
+                  'The reCAPTCHA challenge could not be loaded. Please try again.'
+                )
+              }
+            />
+          </div>
+        </fieldset>
+      ) : (
+        <fieldset>
+          <legend>Verification</legend>
+          <p role='alert' aria-live='polite'>
+            Registration is currently unavailable because reCAPTCHA is not
+            configured. Please try again later.
+          </p>
+        </fieldset>
+      )}
 
-      <button type='submit' disabled={isRegistering}>
+      <button type='submit' disabled={isRegistering || !siteKey}>
         {isRegistering ? <>Registration in progress...</> : <>Register</>}
       </button>
 
