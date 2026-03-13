@@ -93,12 +93,42 @@ export function AuthProvider({ children }) {
     }
   };
 
+  const register = async (userName, userEmail, password, recaptchaToken) => {
+    const options = {
+      body: JSON.stringify({
+        name: userName,
+        email: userEmail,
+        password,
+        recaptchaToken,
+      }),
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+    };
+
+    const res = await fetch(`/api/users/register`, options);
+    const data = await parseJsonSafely(res);
+    const registeredName = data?.name || data?.user?.name;
+
+    if (res.status === 201 && data?.csrfToken) {
+      setName(registeredName || userName);
+      setToken(data.csrfToken);
+      return { success: true };
+    } else {
+      return {
+        success: false,
+        error: `Registration failed: ${data?.message || 'Unable to create account'}`,
+      };
+    }
+  };
+
   // Context value
   const value = {
     name,
     token,
     isAuthenticated: !!token,
     login,
+    register,
     logout,
   };
 

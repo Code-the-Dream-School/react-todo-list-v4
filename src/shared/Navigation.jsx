@@ -34,11 +34,18 @@ function Navigation() {
             </li>
           </>
         ) : (
-          <li>
-            <NavLink to='/login' style={navLinkStyle}>
-              Login
-            </NavLink>
-          </li>
+          <>
+            <li>
+              <NavLink to='/register' style={navLinkStyle}>
+                Register
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to='/login' style={navLinkStyle}>
+                Login
+              </NavLink>
+            </li>
+          </>
         )}
       </ul>
     </nav>
