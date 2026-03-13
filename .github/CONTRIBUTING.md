@@ -1,5 +1,9 @@
 # Contributing to React Todo List V4
 
+## Code of Conduct
+
+All contributors are expected to follow our [Code of Conduct](CODE_OF_CONDUCT.md). Please read it before participating.
+
 ## About This Repository
 
 ### About the App
@@ -129,10 +133,6 @@ npm run sync:from-origin
 # Update all local lesson branches from origin
 npm run sync:from-origin
 ```
-
-## Code of Conduct
-
-All contributors are expected to follow our [Code of Conduct](CODE_OF_CONDUCT.md). Please read it before participating.
 
 ## Reporting Issues
 
