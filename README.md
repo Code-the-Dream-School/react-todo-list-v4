@@ -1,6 +1,14 @@
-# React Todo List V4 (Work in Progress)
+# React Todo List V4
 
 This repo contains an example todo list project that intro to React mentors may use as a reference to evaluate student work. Each branch represents the end state of the student's weekly progress through the curriculum.
+
+## Mentor Note: Task-Store Account Registration
+
+Mentors should direct students to the deployed app to register an account for the todo list API (task-store):
+
+- <https://react-todo-list-v4-snowy.vercel.app>
+
+Students can use that account for authentication flows while working through lessons that require API-backed login and task access.
 
 ## Running this Application
 
@@ -36,6 +44,9 @@ The curriculum progresses through these branches:
 - **09-advanced-state** - Advanced state management patterns
 - **10-react-router** - Client-side routing
 - **11-deployment-security** - Production deployment and security
+
+> [!NOTE]
+> The deploy branch is a non-lesson branch used for deployment and release readiness checks. It should not be treated as a weekly curriculum milestone.
 
 ### Working with Lesson Branches
 
